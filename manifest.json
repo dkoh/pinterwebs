@@ -1,0 +1,26 @@
+{
+  "name": "Pinterwebs",
+  "version": "0.1",
+  "description": "Chrome tab master",
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+  "commands": {
+    "toggle-pin": {
+      "suggested_key": { "default": "Alt+Shift+P" },
+      "description": "Toggle tab pin"
+    }
+  },
+  "permissions": [
+    "tabs",
+    "contextMenus",
+    "storage"
+  ],
+  "browser_action": {
+      "default_icon": "tmtbutton_az.png",
+      "default_popup": "popup.html",
+      "default_title": "AlwaysOnGmail"
+   },
+  "manifest_version": 2
+}
