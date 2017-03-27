@@ -4,66 +4,57 @@
     <meta charset="utf-8">
     <title>Test test test</title>
     <script src="jquery-3.2.0.slim.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <style>
-    /* The switch - the box around the slider */
-.switch {
-position: relative;
-display: inline-block;
-width: 30px;
-height: 17px;
-}
+    .material-icons.md-inactive {color:rgba(0, 0, 0, 0.26)}
+    .material-icons.orange600 { color: #FB8C00; }
+    .material-icons.red600 { color:red; }
+    .table-nowrap {
+    	table-layout:fixed;
+    }
 
-/* Hide default HTML checkbox */
-.switch input {display:none;}
+    .table td {
+      padding-top:0px;
+      padding-bottom:0px;
+      padding-left: 10px;
+      padding-right: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
+      max-width: 300px;
 
-/* The slider */
-.slider {
-position: absolute;
-cursor: pointer;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background-color: #ccc;
--webkit-transition: .4s;
-transition: .4s;
-}
-
-.slider:before {
-position: absolute;
-content: "";
-height: 13px;
-width: 13px;
-left: 2px;
-bottom: 2px;
-background-color: white;
--webkit-transition: .4s;
-transition: .4s;
-}
-
-input:checked + .slider {
-background-color: #2196F3;
-}
-
-input:focus + .slider {
-box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
--webkit-transform: translateX(13px);
--ms-transform: translateX(13px);
-transform: translateX(13px);
-}
+    }
+    .material-icons {
+      font-size:15px;
+    }
+    .tabname{
+      border:none;
+      background:none;
+    }
+    .spantabletext {
+      text-align: left;
+      vertical-align: middle;
+      width: 240px;
+      overflow: hidden;
+      white-space: nowrap;
+      display: block;
+      text-overflow: ellipsis;
+    }
+    .clickable {
+      cursor:default;
+    }
     </style>
   </head>
   <body>
-    <body style="width:783px; height:599px;">
-    <button type="button" name="Tabs" id="getTabs">Buttons</button>
-    <ul id="allTabs"></ul>
-    <label class="switch">
-  <input type="checkbox">
-  <div class="slider"></div>
-  </label>
+    <body style="width:300px; height:599px;">
+    <!-- <button type="button" name="Tabs" id="getTabs" >Buttons</button> -->
+    <table class = "table table-hover table-xs" id= "allTabs"></table>
+
+
 
   <script src="popup.js"></script>
   </body>

@@ -1,5 +1,7 @@
 $("#getTabs").on("click",function(){populateTabList2()});
-
+$(function() {
+    populateTabList2();
+});
 function populateTabList(){
   chrome.tabs.query({currentWindow: true}, function(tabs) {
     var tablist = "<ul class='allTabs'>"
@@ -15,30 +17,69 @@ function populateTabList(){
   });
 }
 
+function UpdatePermTabs(action, tab){
+  var patharray = tab.url.split('/');
+  var pathString = patharray[0] + "//" + patharray[2];
+  if (action  == "add") {
+    permTabs.push(pathString);
+    chrome.tabs.update(tab.id,{pinned: true});
+  }
+  else if(action=="remove"){
+    permTabs.splice(permTabs.indexOf("pathString"),1);
+    chrome.tabs.update(tab.id,{pinned: false});
+  }
+  chrome.storage.sync.set({ "permTabs": permTabs }, function(){ console.log("Saved")});
+  backgroundPage.permTabs = permTabs;
+}
 function populateTabList2(){
   console.log("clicked");
   chrome.tabs.query({currentWindow: true}, function(tabs) {
     var tablist = $('#allTabs');
+    tablist.html("");
     $.each(tabs, function(i)
     {
-        // $('<li/>')
-        //   .data( "tab", tabs[i] )
-        //   .text(tabs[i].title)
-        //   .attr("id","li-tab-"+i)
-        //   .on("click", function(){
-        //     chrome.tabs.update($(this).data("tab").id, {active: true});
-        //   })
-        //   .appendTo(tablist);
-        var listname = $('<span/>').text(tabs[i].title).on("click",function(){
+
+        var listname = $('<td/>')
+          .attr("class", "tabname")
+          .html("<span class='spantabletext clickable'><img src="+tabs[i].favIconUrl+"  width=12 height=12>&nbsp;" +tabs[i].title + "</span>")
+          .on("click",function(){
           chrome.tabs.update($(this).parent().data("tab").id, {active: true});
         })
-        var toggle = '<label class="switch"><input type="checkbox"><div class="slider"></div></label>';
+          ;
 
-        $('<li/>')
+        var ispinned = $('<i />').attr("class","material-icons md-inactive clickable")
+          .text("vpn_key")
+          .on("click",function(){
+            console.log("tab is: ",$(this).closest( "tr" ).data("tab"));
+            if ($(this).attr("class").indexOf("md-inactive")>=0){
+              UpdatePermTabs("add",$(this).closest( "tr" ).data("tab"));
+              populateTabList2();
+            }
+            else {
+              UpdatePermTabs("remove",$(this).closest( "tr" ).data("tab"));
+              populateTabList2();
+            }
+          });
+        var closetab = $('<i />')
+          .attr("class","material-icons  red600 clickable").text("cancel")
+          .on("click",function(){
+            chrome.tabs.remove($(this).closest( "tr" ).data("tab").id);
+            populateTabList2();
+          });
+        // Hack to get pinned tabs
+        if(tabs[i].pinned){
+          ispinned.attr("class","material-icons orange600 clickable");
+          closetab.attr("class","material-icons md-inactive clickable");
+        }
+        var toggle = $('<td/>')
+          .attr("style","width:15%")
+          .append(ispinned)
+          .append(closetab);
+        $('<tr/>')
           .data( "tab", tabs[i] )
           .attr("id","li-tab-"+i)
-          .append(listname).
-          append(toggle)
+          .append(listname)
+          .append(toggle)
           .appendTo(tablist);
     });
 
@@ -69,7 +110,10 @@ function checkTabs(){
   });
 }
 
-chrome.storage.sync.get(["permTabs"], function(items){
-  permTabs = items['permTabs'];
-  checkTabs();
-});
+cool=50;
+backgroundPage = chrome.extension.getBackgroundPage();
+permTabs = backgroundPage.permTabs;
+// chrome.storage.sync.get(["permTabs"], function(items){
+//   permTabs = items['permTabs'];
+//   checkTabs();
+// });

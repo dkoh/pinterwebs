@@ -8,11 +8,38 @@ chrome.storage.sync.get(["permTabs"], function(items){
 console.log("starting Up");
 
 
+
 chrome.commands.onCommand.addListener(function(command) {
-  if (command == "toggle-pin") {
-    checkTabs();
+  if (command=='toggle-feature-tabsmove') {
+    tabsmove();
   }
 });
+
+function tabsmove(){
+  chrome.tabs.query({currentWindow: true}, function(tabs) {
+    console.log("test tabsmove");
+    //get active tab,
+    var activetab=-9;
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].active) {
+        activetab =i;
+        break;
+      }
+    }
+    var patharray = tabs[i].url.split('/');
+    var pathString = patharray[0] + "//" + patharray[2];
+    for (var i = 0; i < tabs.length; i++) {
+      var j = (activetab + 1 + i) % tabs.length;
+      if(tabs[j].url.indexOf(pathString)>=0) {
+        chrome.tabs.update(tabs[j].id, {active: true});
+        break;
+      }
+    }
+
+  });
+}
+
+
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
   checkTabs();
 });
