@@ -4,6 +4,9 @@
 permTabs = ["https://mail.google.com"];
 chrome.storage.sync.get(["permTabs"], function(items){
   permTabs = items['permTabs'];
+  if (permTabs==undefined || !permTabs.length){
+    permTabs =[];
+  }
 });
 console.log("starting Up");
 
@@ -46,6 +49,10 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 
 // find tab
 function checkTabs(){
+  if (permTabs.length <=0) {
+    console.log("no pinned tabs");
+    return;
+  }
   chrome.tabs.query({currentWindow: true}, function(tabs) {
       var firsttabs = permTabs;
       for (var i = 0; i < firsttabs.length; i++) {
@@ -67,37 +74,7 @@ function checkTabs(){
   });
 }
 
-function checkTabs_deprecate(){
-	// Get the currently selected tab
-    chrome.tabs.query({currentWindow: true}, function(tabs) {
-        var firsttabs = permTabs;
-        for (i = 0; i < firsttabs.length; i++) {
-           if(i >= tabs.length){
-               openGmail(i,firsttabs[i]) ;
-           }
-           else if(tabs[i].url.indexOf(firsttabs[i])<0){
-               openGmail(i,firsttabs[i]) ;
-           }
 
-        }
-
-
-    });
-}
-
-
-function openGmail(getint,url_addy){
-    chrome.tabs.query({currentWindow: true}, function(tabs){
-
-        if (getint >= tabs.length){
-          chrome.tabs.create({ url: url_addy, index:getint, active:false,pinned:true });
-        }
-        else if(tabs[getint].pinned){
-            chrome.tabs.update(tabs[getint].id, {'url': url_addy});
-        }
-        else chrome.tabs.create({ url: url_addy, index:getint, active:false,pinned:true });
-    });
-}
 
 // chrome.commands.onCommand.addListener(function(command) {
 //   if (command == "toggle-pin") {

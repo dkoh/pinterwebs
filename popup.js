@@ -86,33 +86,35 @@ function populateTabList2(){
   });
 }
 
-
-function checkTabs(){
-  console.log("checking tabs");
-  chrome.tabs.query({currentWindow: true}, function(tabs) {
-      var firsttabs = permTabs;
-      for (var i = 0; i < firsttabs.length; i++) {
-        //find first instance of weburl
-        for (var j = 0; j < tabs.length; j++) {
-          if(tabs[j].url.indexOf(firsttabs[i])>=0){
-            // Move tab to right place if it is in the wrong place
-            if (j>i){
-              chrome.tabs.move(tabs[j].id, {index: i});
-              chrome.tabs.update(tabs[j].id, {pinned: true});
-            }
-            break;
-          }
-          if (j + 1 == tabs.length){
-             chrome.tabs.create({ url: firsttabs[i], active:false,pinned:true, index: i });
-          }
-        }
-      }
-  });
-}
+//
+// function checkTabs(){
+//   console.log("checking tabs");
+//   chrome.tabs.query({currentWindow: true}, function(tabs) {
+//       var firsttabs = permTabs;
+//       for (var i = 0; i < firsttabs.length; i++) {
+//         //find first instance of weburl
+//         for (var j = 0; j < tabs.length; j++) {
+//           if(tabs[j].url.indexOf(firsttabs[i])>=0){
+//             // Move tab to right place if it is in the wrong place
+//             if (j>i){
+//               chrome.tabs.move(tabs[j].id, {index: i});
+//               chrome.tabs.update(tabs[j].id, {pinned: true});
+//             }
+//             break;
+//           }
+//           if (j + 1 == tabs.length){
+//              chrome.tabs.create({ url: firsttabs[i], active:false,pinned:true, index: i });
+//           }
+//         }
+//       }
+//   });
+// }
 
 cool=50;
 backgroundPage = chrome.extension.getBackgroundPage();
 permTabs = backgroundPage.permTabs;
+checkTabs = backgroundPage.checkTabs;
+
 // chrome.storage.sync.get(["permTabs"], function(items){
 //   permTabs = items['permTabs'];
 //   checkTabs();

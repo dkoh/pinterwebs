@@ -1,6 +1,6 @@
 {
   "name": "Pinterwebs",
-  "version": "0.1",
+  "version": "0.1.1",
   "description": "Chrome tab master",
   "background": {
     "scripts": ["background.js"]
@@ -21,7 +21,7 @@
   "browser_action": {
       "default_icon": "pin-icon.png",
       "default_popup": "popup.html",
-      "default_title": "AlwaysOnGmail"
+      "default_title": "Pinterwebs"
    },
   "manifest_version": 2
 }
