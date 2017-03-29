@@ -61,13 +61,16 @@ function checkTabs(){
           if(tabs[j].url.indexOf(firsttabs[i])>=0){
             // Move tab to right place if it is in the wrong place
             if (j>i){
-              chrome.tabs.move(tabs[j].id, {index: i});
-              chrome.tabs.update(tabs[j].id, {pinned: true});
+              chrome.tabs.move(tabs[j].id, {index: i}, function(tab){
+                chrome.tabs.update(tab.id, {pinned: true});
+                checkTabs();
+              }); return;
+
             }
             break;
           }
           if (j + 1 == tabs.length){
-             chrome.tabs.create({ url: firsttabs[i], active:false,pinned:true, index: i });
+             chrome.tabs.create({ url: firsttabs[i], active:false,pinned:true, index: i }, function(){checkTabs();}); return;
           }
         }
       }
